@@ -1,262 +1,141 @@
-import { useEffect, useState } from "react";
-
+/* eslint-disable */
+import { useState } from "react";
+import "./App.css";
 
 import {
-  MultiPersona,
-  MultiTag,
-  MultiDropDown,
-  SinglePersona,
-  SingleDropDown,
-  SingleTag,
-} from "../src/Components/FormCombobox";
-import { OptionsDropDown } from "./utils/interface";
+  FormDropdownField,
+} from "./Components/FormDropdownField";
+
 
 function App() {
   // ini value untuk single select (udah gaperlu lagi)
-  const [value, setValue] = useState<string[] | number[] | string>([]);
-
-  const [valueMultiple, setValueMultiple] = useState<
-    string | string[] | number[]
-  >([]);
-
-  const onValidate = (selectedKeys: string[]) => {
-    if (selectedKeys?.length === 0) {
-      return "Masukin elemen";
-    }
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([])
+  const [selectedOptionsMulti, setSelectedOptionsMulti] = useState<string[]>([])
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const onChange = (newValue: string[]) => {
+    setSelectedOptions(newValue);
   };
 
-  useEffect(() => {
-    console.log(value, "ini value single");
-  }, [value]);
-
-  useEffect(() => {
-    console.log(valueMultiple);
-  }, [valueMultiple]);
-
-  const onValidateMulti = (selectedKeys: string[]) => {
-    if (selectedKeys.length < 3) {
-      return "sesuatu";
-    }
+  const onChangeMulti = (newValue: string[]) => {
+    setSelectedOptionsMulti(newValue);
   };
 
-  const onChange = (newValue: string | string[] | number[]) => {
-    setValue(newValue);
-  };
+  const onEditClick = () => {
+    setIsEditing(true)
+  }
 
-  const onChangeMultiple = (newValue: string | string[] | number[]) => {
-    setValueMultiple(newValue);
-  };
+  const onCancel = (newValue: string[]) => {
+    setSelectedOptions(newValue)
+    setIsEditing(false)
+  }
 
-  // function getTextForTextField(
-  //   selectedKeys: string[],
-  //   options: OptionsDropDown[]
-  // ) {
-  //   const selectedTexts = (selectedKeys as (string | number)[]).map(
-  //     (value: string | number) => {
-  //       const selectedOption = options.find((option) => option.value === value);
-  //       return selectedOption ? selectedOption.text : "";
-  //     }
-  //   );
-  //   return selectedTexts ? selectedTexts.join(", ") : "";
-  // }
+  const onCancelMulti = (newValue: string[]) => {
+    setSelectedOptionsMulti(newValue)
+    setIsEditing(false)
+  }
 
-  // const onRenderSelectedOption = (option: string[]) => {
-  //   if (option.length === 0) return [];
-  //   return <div>{getTextForTextField(option, optionsFluentV9)}</div>;
-  // };
+  const onSave = (newValue: string[]) => {
+    setIsEditing(false)
+    setSelectedOptions(newValue)
+  }
 
-  const optionsFluentV9: OptionsDropDown[] = [
+  const onSaveMulti = (newValue: string[]) => {
+    setIsEditing(false)
+    setSelectedOptionsMulti(newValue)
+  }
+
+
+  const options = [
+    { id: "1", label: "Cat" },
+    { id: "2", label: "Dog" },
+    { id: "3", label: "Ferret" },
+    { id: "4", label: "Fish" },
+    { id: "5", label: "Hamster" },
+    { id: "6", label: "Snake" },
+    { id: "7", label: "Ikan" },
+    { id: "8", label: "Ayam" },
+    { id: "9", label: "Udang" },
+    { id: "10", label: "Kepiting" },
+  ]
+
+  const optionsPersona = [
     {
-      value: "kathok",
-      text: "Katri Athokas",
+      id: "kathok",
+      label: "Katri Athokas",
       data: {
         secondaryText: "Available",
         status: "available",
       },
     },
     {
-      value: "eatkins",
-      text: "Elvia Atkins",
+      id: "eatkins",
+      label: "Elvia Atkins",
       data: {
         secondaryText: "Busy",
         status: "busy",
       },
     },
     {
-      value: "cevans",
-      text: "Cameron Evans",
+      id: "cevans",
+      label: "Cameron Evans",
       data: {
         secondaryText: "Away",
         status: "away",
       },
     },
     {
-      value: "whoward",
-      text: "Wanda Howard",
+      id: "whoward",
+      label: "Wanda Howard",
       data: {
         secondaryText: "Out of office",
         status: "out-of-office",
       },
     },
     {
-      value: "jonell",
-      text: "Johnie McConnell",
+      id: "jonell",
+      label: "Johnie McConnell",
       data: {
         secondaryText: "Away",
         status: "away",
       },
     },
     {
-      value: "krisson",
-      text: "Kristin Patterson",
+      id: "krisson",
+      label: "Kristin Patterson",
       data: {
         secondaryText: "Out of office",
         status: "out-of-office",
       },
     },
     {
-      value: "carand",
-      text: "Carole Poland",
+      id: "carand",
+      label: "Carole Poland",
       data: {
         secondaryText: "Busy",
         status: "busy",
       },
     },
-  ];
+  ]
 
-  const optionTags = [
-    {
-      value: "heritages",
-      text: "Heritages",
-    },
-    {
-      value: "socials",
-      text: "Socials",
-    },
-    {
-      value: "economics",
-      text: "Economics",
-    },
-    {
-      value: "environments",
-      text: "Environments",
-    },
-    {
-      value: "politics",
-      text: "Politics",
-    },
-    {
-      value: "sports",
-      text: "Sports",
-    },
-    {
-      value: "educations",
-      text: "Educations",
-    },
-    {
-      value: "technologies",
-      text: "Technologies",
-    },
-  ];
-
-  // const onRenderOptionPerson = (option: OptionsDropDown): JSX.Element => {
-  //   return <div>{option.text}</div>;
-  // };
-
-  // useEffect(() => {}, [value]);
-
-  // const onCancel = (keys: string[] | number[] | string) => {
-  //   setValue(keys);
-  // };
-
-  // const onCancelMultiple = (keys: string[] | number[] | string) => {
-  //   setValueMultiple(keys);
-  // };
-
-  // const onSave = (keys: string[] | number[] | string) => {
-  //   console.log(keys, "tekan save di App");
-  // };
 
   return (
     <>
-
-      <div
-        style={{ margin: "20px", border: "dashed black 3px", padding: "10px" }}
-      >
-        <SinglePersona
-          options={optionsFluentV9}
-          label={"Single Uncontrolled Persona"}
-          type="persona"
-          orientation="vertical"
-          // onValidate={onValidate}
-          // onRenderSelectedOption={onRenderSelectedOption}
-        />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", border: "1px solid red", padding: "0 20px 20px 20px" }}>
+        <div>
+          <FormDropdownField defaultSelectedOptions={["1"]} type="dropdown" label="Dropdown Uncontrolled" options={options} />
+          <FormDropdownField options={options} onChange={onChange} selectedOptions={selectedOptions} onCancel={onCancel} type="dropdown" label="Dropdown Controlled" isEditing={isEditing} onEditClick={onEditClick} onSave={onSave} />
+          <FormDropdownField type="persona" label="Persona Uncontrolled" options={optionsPersona} />
+          <FormDropdownField type="tags" label="Tags Uncontrolled" options={options} />
+        </div>
+        <div>
+          <FormDropdownField multiSelect type="dropdown" label="Dropdown Uncontrolled Multiselect" options={options} />
+          <FormDropdownField multiSelect options={options} onChange={onChangeMulti} selectedOptions={selectedOptionsMulti} onCancel={onCancelMulti} type="dropdown" label="Dropdown Controlled" onSave={onSaveMulti} />
+          <FormDropdownField multiSelect type="tags" label="Tag Uncontrolled Multiselect" options={options} />
+          <FormDropdownField multiSelect type="persona" label="Persona Uncontrolled Multiselect" options={optionsPersona} />
+        </div>
       </div>
 
-      <div
-        style={{ margin: "20px", border: "dashed red 3px", padding: "10px" }}
-      >
-        <MultiPersona
-          options={optionsFluentV9}
-          label={"Multi Uncontrolled Persona"}
-          multiSelect={true}
-          type="persona"
-          orientation="vertical"
-          // onValidate={onValidateMulti}
-          // onRenderSelectedOption={onRenderSelectedOption}
-        />
-      </div>
 
-      <div
-        style={{ margin: "20px", border: "dashed purple 3px", padding: "10px" }}
-      >
-        <SingleTag
-          options={optionTags}
-          label={"Single Uncontrolled Tag"}
-          orientation="horizontal"
-          type="tags"
-          // onValidate={onValidate}
-        />
-      </div>
-      <div
-        style={{ margin: "20px", border: "dashed green 3px", padding: "10px" }}
-      >
-        <MultiTag
-          options={optionTags}
-          label={"Multi Uncontrolled Tags"}
-          multiSelect={true}
-          type="tags"
-          orientation="horizontal"
-          // onValidate={onValidateMulti}
-        />
-      </div>
-
-      <div
-        style={{ margin: "20px", border: "dashed grey 3px", padding: "10px" }}
-      >
-        <SingleDropDown
-          options={optionTags}
-          label={"Single Uncontrolled Dropdown"}
-          orientation="horizontal"
-          type="dropdown"
-          onValidate={onValidate}
-        />
-      </div>
-
-      <div
-        style={{ margin: "20px", border: "dashed blue 3px", padding: "10px" }}
-      >
-        <MultiDropDown
-          options={optionTags}
-          label={"Multi Uncontrolled Dropdown"}
-          multiSelect={true}
-          orientation="horizontal"
-          type="dropdown"
-          onValidate={onValidateMulti}
-        />
-      </div>
-
-     
     </>
   );
 }
