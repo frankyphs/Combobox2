@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { IFieldDropdown, IOptionsDropdown } from "../utils/interface";
 import { Search16Filled, Add16Filled, ChevronDown12Regular } from "@fluentui/react-icons";
 import InactiveReadView from "./InactiveReadView";
-import { MultiOptionTags, MultiOptionTagsIsEditingFalse, OptionDropdown, OptionMultiPersona, OptionPersona, OptionTags, InputDropdownIsEditingFalse } from "./OptionDropdown";
+import { MultiOptionTags, OptionDropdown, OptionMultiPersona, OptionPersona, OptionTags, InputDropdownIsEditingFalse } from "./OptionDropdown";
 
 
 
@@ -87,16 +87,6 @@ export const FormDropdownField = (props: IFieldDropdown) => {
     return `${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getDate()}${now.getMonth()}${now.getFullYear()}`;
   }
 
-  const onTagClick = (option: string, _: any) => {
-    if (props.selectedOptions) {
-      const filterOption = props.selectedOptions.filter((o) => o !== option);
-      props.onChange && props.onChange(filterOption);
-    } else if (selectedOptions) {
-      setSelectedOptions(selectedOptions.filter((o) => o !== option));
-    }
-    console.log("tes hapus tag");
-  };
-
   const removeItem: TagGroupProps["onDismiss"] = (_e, { value }) => {
     console.log("tes hapus tag")
     setSelectedOptions([...selectedOptions].filter((tag) => tag !== value));
@@ -141,7 +131,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                 children: (_, propsInput) => (
                   <button {...propsInput}>
                     {props.type === "tags" && !props.multiSelect ? (
-                      <OptionTags option={objectSingle} onTagClick={onTagClick} />
+                      <OptionTags option={objectSingle} />
                     )
                       : props.type === "persona" && !!!props.multiSelect ? (
                         <>
@@ -149,7 +139,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                         </>
                       )
                         : props.type === "tags" && props.multiSelect ? (
-                          <MultiOptionTags selectedOptions={objectSelectedOption} onTagClick={removeItem} />
+                          <MultiOptionTags selectedOptions={objectSelectedOption} onTagClick={removeItem} isEditing={isEditing === true || props.isEditing === true} />
                         )
                           : props.type === "persona" && props.multiSelect ? (
                             <>
@@ -222,7 +212,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                         props.type === "dropdown" && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0) ? (
                           <InputDropdownIsEditingFalse simpanDropdown={value} />
                         ) : (props.type === "tags" && props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
-                          <MultiOptionTagsIsEditingFalse selectedOptions={objectSelectedOption} />
+                          <MultiOptionTags selectedOptions={objectSelectedOption} isEditing={props.isEditing || isEditing} />
                         ) : (props.type === "tags" && !!!props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
                           <OptionTags option={objectSingle} />
                         ) : (props.type === "persona" && !!!props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
