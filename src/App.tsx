@@ -5,7 +5,6 @@ import "./App.css";
 import {
   FormDropdownField,
 } from "./Components/FormDropdownField";
-import { IOptionsTag } from "./utils/interface";
 
 
 function App() {
@@ -59,7 +58,7 @@ function App() {
     { id: "10", label: "Kepiting" },
   ]
 
-  const [optionsTag, setOptionsTag] = useState<IOptionsTag[]>([
+  const optionsTag = [
     { id: "1", label: "religion", data: { color: "#F99417" } },
     { id: "2", label: "education", data: { color: "#D0D4CA" } },
     { id: "3", label: "politic" },
@@ -68,7 +67,7 @@ function App() {
     { id: "6", label: "technology", data: { color: "#D988B9" } },
     { id: "7", label: "economy", data: { color: "#BCA37F" } },
     { id: "8", label: "criminal" },
-  ]);
+  ];
 
   const optionsPersona = [
     {

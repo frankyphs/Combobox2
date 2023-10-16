@@ -11,7 +11,7 @@ import {
   AvatarGroupPopover,
   // PartitionAvatarGroupItemsOptions
 } from "@fluentui/react-components";
-import { IOptionsDropdown, IOptionsTag } from "../utils/interface";
+import { IOptionsTag } from "../utils/interface";
 
 
 export const OptionDropdown = (props: any) => {
@@ -71,7 +71,7 @@ export const OptionTags = (props: any) => {
 export const MultiOptionTags = (props: any) => {
   return (
     <TagGroup onDismiss={props.onTagClick} aria-label="Dismiss example" style={{ display: "flex", flexWrap: "wrap", gap: "3px" }}>
-      {props.selectedOptions?.map((tag: IOptionsTag, index: any) => (
+      {props.selectedOptions?.map((tag: IOptionsTag, _: any) => (
         <InteractionTag size="extra-small" appearance="brand" value={tag.id} key={tag.id}>
           <InteractionTagPrimary
             style={{ backgroundColor: `${tag?.data?.color}` }}
@@ -89,7 +89,7 @@ export const MultiOptionTagsIsEditingFalse = (props: any) => {
   return (
     <div style={{ paddingTop: "5px", paddingBottom: "5px" }}>
       <TagGroup aria-label="Dismiss example" style={{ display: "flex", flexWrap: "wrap", gap: "3px" }}>
-        {props.selectedOptions?.map((tag: IOptionsTag, index: any) => (
+        {props.selectedOptions?.map((tag: IOptionsTag, _: any) => (
           <InteractionTag size="extra-small" appearance="brand" value={tag.id} key={tag.id}>
             <InteractionTagPrimary
               style={{ backgroundColor: `${tag?.data?.color}` }}

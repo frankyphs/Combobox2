@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { Button, Dropdown, Field, Input, Option, InputOnChangeData, TagGroupProps, partitionAvatarGroupItems, } from "@fluentui/react-components";
-import React, { useState, useEffect, ReactElement, ReactNode, ReactComponentElement, ReactEventHandler, ReactPortal, ReactPropTypes } from "react";
+import React, { useState, useEffect } from "react";
 import { IFieldDropdown, IOptionsDropdown } from "../utils/interface";
 import { Search16Filled, Add16Filled, ChevronDown12Regular } from "@fluentui/react-icons";
 import InactiveReadView from "./InactiveReadView";
@@ -78,7 +78,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
     setIsEditing(true);
   };
 
-  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
+  const onChangeSearch = (_: any, data: InputOnChangeData) => {
     setSearchValue(data.value);
   }
 
@@ -87,7 +87,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
     return `${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getDate()}${now.getMonth()}${now.getFullYear()}`;
   }
 
-  const onTagClick = (option: string, index: number) => {
+  const onTagClick = (option: string, _: any) => {
     if (props.selectedOptions) {
       const filterOption = props.selectedOptions.filter((o) => o !== option);
       props.onChange && props.onChange(filterOption);
