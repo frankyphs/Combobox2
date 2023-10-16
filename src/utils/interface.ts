@@ -21,7 +21,7 @@ export interface IOptionsTag {
   key?: string,
   label: string,
   data?: {
-    color: "string"
+    color: string
   }
 }
 

@@ -11,7 +11,7 @@ import {
   AvatarGroupPopover,
   // PartitionAvatarGroupItemsOptions
 } from "@fluentui/react-components";
-import { IOptionsDropdown } from "../utils/interface";
+import { IOptionsDropdown, IOptionsTag } from "../utils/interface";
 
 
 export const OptionDropdown = (props: any) => {
@@ -62,6 +62,7 @@ export const OptionMultiPersona = (props: any) => {
 export const OptionTags = (props: any) => {
   return (
     <Tag
+      style={{ backgroundColor: props.option?.data?.color }}
       value={props.option?.id}
       key={props.option?.id} size="extra-small" appearance="brand">{props.option?.label}</Tag>
   )
@@ -70,13 +71,14 @@ export const OptionTags = (props: any) => {
 export const MultiOptionTags = (props: any) => {
   return (
     <TagGroup onDismiss={props.onTagClick} aria-label="Dismiss example" style={{ display: "flex", flexWrap: "wrap", gap: "3px" }}>
-      {props.selectedOptions?.map((tag: any, index: any) => (
+      {props.selectedOptions?.map((tag: IOptionsTag, index: any) => (
         <InteractionTag size="extra-small" appearance="brand" value={tag.id} key={tag.id}>
           <InteractionTagPrimary
+            style={{ backgroundColor: `${tag?.data?.color}` }}
           >
             {tag.label}
           </InteractionTagPrimary>
-          <InteractionTagSecondary aria-label="remove" />
+          <InteractionTagSecondary style={{ backgroundColor: `${tag?.data?.color}` }} aria-label="remove" />
         </InteractionTag>
       ))}
     </TagGroup>
@@ -87,9 +89,10 @@ export const MultiOptionTagsIsEditingFalse = (props: any) => {
   return (
     <div style={{ paddingTop: "5px", paddingBottom: "5px" }}>
       <TagGroup aria-label="Dismiss example" style={{ display: "flex", flexWrap: "wrap", gap: "3px" }}>
-        {props.selectedOptions?.map((tag: IOptionsDropdown) => (
+        {props.selectedOptions?.map((tag: IOptionsTag, index: any) => (
           <InteractionTag size="extra-small" appearance="brand" value={tag.id} key={tag.id}>
             <InteractionTagPrimary
+              style={{ backgroundColor: `${tag?.data?.color}` }}
             >
               {tag.label}
             </InteractionTagPrimary>
@@ -99,6 +102,22 @@ export const MultiOptionTagsIsEditingFalse = (props: any) => {
     </div>
   )
 }
+// export const MultiOptionTagsIsEditingFalse = (props: any) => {
+//   return (
+//     <div style={{ paddingTop: "5px", paddingBottom: "5px" }}>
+//       <TagGroup aria-label="Dismiss example" style={{ display: "flex", flexWrap: "wrap", gap: "3px" }}>
+//         {props.selectedOptions?.map((tag: IOptionsDropdown) => (
+//           <InteractionTag size="extra-small" appearance="brand" value={tag.id} key={tag.id}>
+//             <InteractionTagPrimary
+//             >
+//               {tag.label}
+//             </InteractionTagPrimary>
+//           </InteractionTag>
+//         ))}
+//       </TagGroup>
+//     </div>
+//   )
+// }
 
 
 export const InputDropdownIsEditingFalse = (props: any) => {

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { Button, Dropdown, Field, Input, Option, InputOnChangeData, TagGroupProps, partitionAvatarGroupItems, } from "@fluentui/react-components";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactElement, ReactNode, ReactComponentElement, ReactEventHandler, ReactPortal, ReactPropTypes } from "react";
 import { IFieldDropdown, IOptionsDropdown } from "../utils/interface";
 import { Search16Filled, Add16Filled, ChevronDown12Regular } from "@fluentui/react-icons";
 import InactiveReadView from "./InactiveReadView";
@@ -136,6 +136,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
               multiselect={props.multiSelect}
               selectedOptions={props.selectedOptions || selectedOptions}
               value={value}
+              //@ts-ignore
               button={(props.selectedOptions && props.selectedOptions?.length > 0) || selectedOptions?.length > 0 ? {
                 children: (_, propsInput) => (
                   <button {...propsInput}>
