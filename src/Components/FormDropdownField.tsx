@@ -103,6 +103,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
     <>
       <div style={{ marginTop: "20px", border: "1px dashed red", padding: "5px" }}>
         <Field
+          size={props.size ? props.size : "medium"}
           label={props.label}
           orientation={props.orientation}
           hint={
@@ -112,10 +113,10 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                   <div
                     style={{ display: "flex", gap: "6px", marginTop: "6px" }}
                   >
-                    <Button appearance="primary" onClick={handleSaveClick}>
+                    <Button appearance="primary" onClick={handleSaveClick} size={props.size ? props.size : "medium"}>
                       {props.saveText || "Save"}
                     </Button>
-                    <Button appearance="secondary" onClick={handleCancelClick}>
+                    <Button appearance="secondary" onClick={handleCancelClick} size={props.size ? props.size : "medium"}>
                       {props.cancelText || "Cancel"}
                     </Button>
                   </div>
@@ -205,6 +206,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
           {!isEditing && (
             <div style={{ display: "flex" }}>
               <InactiveReadView
+                size={props.size ? props.size : "medium"}
                 defaultValue={
                   value
                 }

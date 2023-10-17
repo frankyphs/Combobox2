@@ -49,6 +49,7 @@ export interface IFieldDropdown {
   onChangeOption?: (newValue: IOptionsDropdown[]) => void
   onRenderOption?: (option: IOptionsDropdown) => JSX.Element
   onRenderSelectedOption?: (option: string[]) => JSX.Element
+  size?: "small" | "medium" | "large"
 }
 
 export interface IInactiveReadView {

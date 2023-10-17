@@ -90,8 +90,8 @@ const InactiveReadView: React.FC<IInactiveReadView> = (props) => {
           props.input
             ? props.input
             : {
-                children: () => <p>{props.defaultValue}</p>,
-              }
+              children: () => <p>{props.defaultValue}</p>,
+            }
         }
         contentBefore={props.contentBefore}
         contentAfter={
