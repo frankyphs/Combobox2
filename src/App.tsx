@@ -44,6 +44,22 @@ function App() {
     setSelectedOptionsMulti(newValue)
   }
 
+  const onClearSingle = (newValue: string[]): void => {
+    setSelectedOptions(newValue)
+  }
+
+  const onClearMulti = (newValue: string[]): void => {
+    setSelectedOptionsMulti(newValue)
+  }
+
+  const onDeleteTagSingle = (newValue: string[]): void => {
+    setSelectedOptions(newValue)
+  }
+
+  const onDeleteTagMulti = (newValue: string[]): void => {
+    setSelectedOptionsMulti(newValue)
+  }
+
 
   const options = [
     { id: "1", label: "Cat" },
@@ -132,7 +148,7 @@ function App() {
   return (
     <>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", border: "1px solid red", padding: "0 20px 20px 20px" }}>
-        <div>
+        {/* <div>
           <FormDropdownField defaultSelectedOptions={["1"]} type="dropdown" label="Dropdown Uncontrolled" options={options} />
           <FormDropdownField options={options} onChange={onChange} selectedOptions={selectedOptions} onCancel={onCancel} type="dropdown" label="Dropdown Controlled" isEditing={isEditing} onEditClick={onEditClick} onSave={onSave} />
           <FormDropdownField type="persona" label="Persona Uncontrolled" options={optionsPersona} />
@@ -143,6 +159,20 @@ function App() {
           <FormDropdownField multiSelect options={options} onChange={onChangeMulti} selectedOptions={selectedOptionsMulti} onCancel={onCancelMulti} type="dropdown" label="Dropdown Controlled" onSave={onSaveMulti} />
           <FormDropdownField multiSelect type="tags" label="Tag Uncontrolled Multiselect" options={optionsTag} />
           <FormDropdownField multiSelect type="persona" label="Persona Uncontrolled Multiselect" options={optionsPersona} />
+        </div> */}
+        <div>
+          <FormDropdownField defaultSelectedOptions={["1"]} type="dropdown" label="Dropdown Uncontrolled" options={options} saveText="Simpan" cancelText="Batal" placeholderSearch="Cari..." placeholderDropdown="Pilih Opsi" addText="Tambah Opsi" clearText="Hapus" />
+          {/* <FormDropdownField options={options} onChange={onChange} selectedOptions={selectedOptions} onCancel={onCancel} type="dropdown" label="Dropdown Controlled" isEditing={isEditing} onEditClick={onEditClick} onSave={onSave} onClear={onClearSingle} /> */}
+          <FormDropdownField type="persona" label="Persona Uncontrolled" options={optionsPersona} />
+          <FormDropdownField type="tags" label="Tags Uncontrolled" options={optionsTag} />
+          <FormDropdownField type="tags" label="Tags Controlled" options={optionsTag} onChange={onChange} selectedOptions={selectedOptions} onCancel={onCancel} isEditing={isEditing} onEditClick={onEditClick} onSave={onSave} onClear={onClearSingle} onDeleteTag={onDeleteTagSingle} />
+        </div>
+        <div>
+          <FormDropdownField multiSelect type="dropdown" label="Dropdown Uncontrolled Multiselect" options={options} />
+          {/* <FormDropdownField multiSelect options={options} onChange={onChangeMulti} selectedOptions={selectedOptionsMulti} onCancel={onCancelMulti} type="dropdown" label="Dropdown Controlled" onSave={onSaveMulti} onClear={onClearMulti} /> */}
+          <FormDropdownField multiSelect type="persona" label="Persona Uncontrolled Multiselect" options={optionsPersona} />
+          <FormDropdownField multiSelect type="tags" label="Tag Uncontrolled Multiselect" options={optionsTag} />
+          <FormDropdownField multiSelect type="tags" label="Tag Controlled Multiselect" options={optionsTag} onChange={onChangeMulti} selectedOptions={selectedOptionsMulti} onCancel={onCancelMulti} onSave={onSaveMulti} onClear={onClearMulti} onDeleteTag={onDeleteTagMulti} />
         </div>
       </div>
 

@@ -2,7 +2,7 @@
 import { Button, Dropdown, Field, Input, Option, InputOnChangeData, TagGroupProps, partitionAvatarGroupItems, } from "@fluentui/react-components";
 import React, { useState, useEffect } from "react";
 import { IFieldDropdown, IOptionsDropdown } from "../utils/interface";
-import { Search16Filled, Add16Filled, ChevronDown12Regular } from "@fluentui/react-icons";
+import { Search16Filled, Add16Filled, ChevronDown20Regular } from "@fluentui/react-icons";
 import InactiveReadView from "./InactiveReadView";
 import { MultiOptionTags, OptionDropdown, OptionMultiPersona, OptionPersona, OptionTags, InputDropdownIsEditingFalse } from "./OptionDropdown";
 
@@ -17,6 +17,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
   const [objectSingle, setObjectSingle] = useState<IOptionsDropdown>()
   const [objectSelectedOption, setObjectSelectedOption] = useState<IOptionsDropdown[]>([])
   const [nameForPersona, setNameForPersona] = React.useState<string[]>([]);
+
 
   useEffect(() => {
     props.options && getTextForTextField(props.selectedOptions || selectedOptions, props.options)
@@ -72,6 +73,10 @@ export const FormDropdownField = (props: IFieldDropdown) => {
     props.onCancel && props.onCancel(cancelData);
   };
 
+  const handleClearClick = () => {
+    props.onClear && props.onChange && props.selectedOptions ? props.onClear([]) : setSelectedOptions([]);
+  }
+
   const handleEditClick = () => {
     props.onEditClick && props.onEditClick()
     !!!props.isEditing !== undefined && props.isEditing && setIsEditing(props.isEditing)
@@ -88,8 +93,8 @@ export const FormDropdownField = (props: IFieldDropdown) => {
   }
 
   const removeItem: TagGroupProps["onDismiss"] = (_e, { value }) => {
-    console.log("tes hapus tag")
-    setSelectedOptions([...selectedOptions].filter((tag) => tag !== value));
+    props.onDeleteTag && props.selectedOptions ? props.onDeleteTag([...props.selectedOptions].filter((tag) => tag !== value))
+      : setSelectedOptions([...selectedOptions].filter((tag) => tag !== value));
   };
 
   const partitionedItems = partitionAvatarGroupItems({ items: nameForPersona });
@@ -108,10 +113,10 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                     style={{ display: "flex", gap: "6px", marginTop: "6px" }}
                   >
                     <Button appearance="primary" onClick={handleSaveClick}>
-                      Save
+                      {props.saveText || "Save"}
                     </Button>
                     <Button appearance="secondary" onClick={handleCancelClick}>
-                      Cancel
+                      {props.cancelText || "Cancel"}
                     </Button>
                   </div>
                 ),
@@ -121,11 +126,11 @@ export const FormDropdownField = (props: IFieldDropdown) => {
         >
           {isEditing && (
             <Dropdown
-              placeholder="Select an animal"
               onOptionSelect={onOptionSelect}
               multiselect={props.multiSelect}
               selectedOptions={props.selectedOptions || selectedOptions}
               value={value}
+              placeholder={props.placeholderDropdown || "Select Options"}
               //@ts-ignore
               button={(props.selectedOptions && props.selectedOptions?.length > 0) || selectedOptions?.length > 0 ? {
                 children: (_, propsInput) => (
@@ -151,14 +156,14 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                                 {propsInput.value}
                               </>
                             )}
-                    <span><ChevronDown12Regular /></span>
+                    <><ChevronDown20Regular /></>
                   </button>
                 )
               }
                 : undefined
               }
             >
-              <Input value={searchValue} onClick={(ev) => { ev.stopPropagation() }} placeholder="Search..." onChange={onChangeSearch} contentBefore={<Search16Filled />} type="search" />
+              <Input value={searchValue} onClick={(ev) => { ev.stopPropagation() }} placeholder={props.placeholderSearch || "Search..."} onChange={onChangeSearch} contentBefore={<Search16Filled />} type="search" />
               <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                 {props.options && props.options
                   .filter((option) => option.label?.toLowerCase().includes(searchValue.toLowerCase()))
@@ -188,14 +193,12 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                   }
                 }}
               >
-                Add New Label
+                {props.addText || "Add New Option"}
               </Button>
               <Button
-                onClick={() => {
-                  props.onChange && props.selectedOptions ? props.onChange([]) : setSelectedOptions([])
-                }}
+                onClick={handleClearClick}
               >
-                Clear
+                {props.clearText || "Clear"}
               </Button>
             </Dropdown>
           )}

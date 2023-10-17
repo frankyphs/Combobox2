@@ -27,6 +27,12 @@ export interface IOptionsTag {
 
 export interface IFieldDropdown {
   label?: string,
+  addText?: string,
+  clearText?: string,
+  saveText?: string,
+  cancelText?: string,
+  placeholderSearch?: string,
+  placeholderDropdown?: string,
   defaultSelectedOptions?: string[],
   selectedOptions?: string[],
   options?: IOptionsDropdown[] | IOptionsPersona[] | IOptionsTag[],
@@ -38,6 +44,8 @@ export interface IFieldDropdown {
   onChange?: (selectedOptions: string[]) => void
   onSave?: (selectedOptions: string[]) => void
   onCancel?: (selectedOptions: string[]) => void
+  onClear?: (selectedOptions: string[]) => void
+  onDeleteTag?: (selectedOptions: string[]) => void
   onChangeOption?: (newValue: IOptionsDropdown[]) => void
   onRenderOption?: (option: IOptionsDropdown) => JSX.Element
   onRenderSelectedOption?: (option: string[]) => JSX.Element
