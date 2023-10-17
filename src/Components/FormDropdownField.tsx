@@ -156,7 +156,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                                 {propsInput.value}
                               </>
                             )}
-                    <><ChevronDown20Regular /></>
+                    <><ChevronDown20Regular style={{ color: "#686868" }} /></>
                   </button>
                 )
               }
