@@ -137,19 +137,19 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                 children: (_, propsInput) => (
                   <button {...propsInput}>
                     {props.type === "tags" && !props.multiSelect ? (
-                      <OptionTags option={objectSingle} />
+                      <OptionTags option={objectSingle} size="props.size" />
                     )
                       : props.type === "persona" && !!!props.multiSelect ? (
                         <>
-                          <OptionPersona option={objectSingle} />
+                          <OptionPersona option={objectSingle} size={props.size} />
                         </>
                       )
                         : props.type === "tags" && props.multiSelect ? (
-                          <MultiOptionTags selectedOptions={objectSelectedOption} onTagClick={removeItem} isEditing={isEditing === true || props.isEditing === true} />
+                          <MultiOptionTags selectedOptions={objectSelectedOption} onTagClick={removeItem} isEditing={isEditing === true || props.isEditing === true} size={props.size} />
                         )
                           : props.type === "persona" && props.multiSelect ? (
                             <>
-                              <OptionMultiPersona partitionedItems={partitionedItems} />
+                              <OptionMultiPersona partitionedItems={partitionedItems} size={props.size} />
                             </>
                           )
                             : (
@@ -171,13 +171,13 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                   .map((filteredOption) => (
                     <Option text={filteredOption.label} value={filteredOption.id} key={filteredOption.id}>
                       {props.type === "dropdown" && (
-                        <OptionDropdown option={filteredOption} />
+                        <OptionDropdown option={filteredOption} size={props.size} />
                       )}
                       {props.type === "persona" && (
-                        <OptionPersona option={filteredOption} />
+                        <OptionPersona option={filteredOption} size={props.size} />
                       )}
                       {props.type === "tags" && (
-                        <OptionTags option={filteredOption} />
+                        <OptionTags option={filteredOption} size={props.size} />
                       )}
                     </Option>
                   ))}
@@ -217,13 +217,13 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                         props.type === "dropdown" && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0) ? (
                           <InputDropdownIsEditingFalse simpanDropdown={value} />
                         ) : (props.type === "tags" && props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
-                          <MultiOptionTags selectedOptions={objectSelectedOption} isEditing={props.isEditing || isEditing} />
+                          <MultiOptionTags selectedOptions={objectSelectedOption} isEditing={props.isEditing || isEditing} size={props.size} />
                         ) : (props.type === "tags" && !!!props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
-                          <OptionTags option={objectSingle} />
+                          <OptionTags option={objectSingle} size={props.size} />
                         ) : (props.type === "persona" && !!!props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
-                          <OptionPersona option={objectSingle} />
+                          <OptionPersona option={objectSingle} size={props.size} />
                         ) : (props.type === "persona" && props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
-                          <OptionMultiPersona partitionedItems={partitionedItems} />
+                          <OptionMultiPersona partitionedItems={partitionedItems} size={props.size} />
                         ) : <div />
 
                       )
