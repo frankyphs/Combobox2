@@ -31,7 +31,11 @@ export const OptionPersona = (props: any) => {
       //   : props.option?.data?.secondaryText}
       size={props.size === "large" ? "medium" : props.size === "medium" ? "small" : "extra-small"}
       textAlignment="center"
-      avatar={{ color: "colorful", "aria-hidden": true }}
+      avatar={props.option?.data?.icon ? {
+        image: {
+          src: `${props.option?.data?.icon}`,
+        },
+      } : { color: "colorful", "aria-hidden": true }}
       name={props.option?.label}
       presence={{
         status: props.option?.data?.status,

@@ -92,6 +92,7 @@ function App() {
       data: {
         secondaryText: "Available",
         status: "available",
+        icon: "https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-react-assets/persona-male.png"
       },
     },
     {
