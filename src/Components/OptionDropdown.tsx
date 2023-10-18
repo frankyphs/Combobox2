@@ -15,28 +15,35 @@ import {
 
 export const OptionDropdown = (props: any) => {
   return (
-    <div style={props.size === "small" ? { fontSize: "12px" } : props.size === "medium" ? { fontSize: "14px" } : { fontSize: "16px" }}>{props.option?.label}</div>
+    <div style={props.size === "small" ? { fontSize: "12px" } : props.size === "large" ? { fontSize: "16px" } : { fontSize: "14px" }}>{props.option?.label}</div>
   )
 }
 
 export const OptionPersona = (props: any) => {
   return (
     <Persona
-      size={props.size === "large" ? "small" : "extra-small"}
+      primaryText={props.size === "small" ? { style: { fontSize: "12px" } } : props.size === "large" ? { style: { fontSize: "16px" } } : { style: { fontSize: "14px" } }}
+      // secondaryText={props.size === "small" ?
+      //   {
+      //     style: { fontSize: "10px" },
+      //     children: props.option?.data?.secondaryText
+      //   }
+      //   : props.option?.data?.secondaryText}
+      size={props.size === "large" ? "medium" : props.size === "medium" ? "small" : "extra-small"}
       textAlignment="center"
       avatar={{ color: "colorful", "aria-hidden": true }}
       name={props.option?.label}
       presence={{
         status: props.option?.data?.status,
       }}
-      secondaryText={props.option?.data?.secondaryText}
+    // secondaryText={props.option?.data?.secondaryText}
     />
   )
 }
 
 export const OptionMultiPersona = (props: any) => {
   return (
-    <AvatarGroup layout="stack" style={{ alignItems: "center" }} size={props.size === "large" ? 24 : 20}>
+    <AvatarGroup layout="stack" style={{ alignItems: "center" }} size={props.size === "large" ? 24 : props.size === "small" ? 16 : 20}>
       {props.partitionedItems?.inlineItems?.map((name: any) => (
         <AvatarGroupItem name={name} key={name} />
       ))}
@@ -61,7 +68,7 @@ export const OptionTags = (props: any) => {
     <Tag
       style={{ backgroundColor: props.option?.data?.color }}
       value={props.option?.id}
-      key={props.option?.id} size={props.size === "large" ? "small" : "extra-small"} appearance="brand">{props.option?.label}</Tag>
+      key={props.option?.id} size={props.size === "large" ? "medium" : props.size === "small" ? "extra-small" : "small"} appearance="brand">{props.option?.label}</Tag>
   )
 }
 
@@ -79,7 +86,7 @@ export const MultiOptionTags = (props: any) => {
       <TagGroup onDismiss={props.onTagClick} aria-label="Dismiss example" style={{ display: "flex", flexWrap: "wrap", gap: "3px" }}>
         {props.selectedOptions?.map((tag: any, _: any) => (
           <InteractionTag onMouseEnter={() => handleMouseEnter(tag.id)}
-            onMouseLeave={handleMouseLeave} size={props.size === "large" ? "small" : "extra-small"} appearance="brand" value={tag.id} key={tag.id}>
+            onMouseLeave={handleMouseLeave} size={props.size === "large" ? "medium" : props.size === "small" ? "extra-small" : "small"} appearance="brand" value={tag.id} key={tag.id}>
             <InteractionTagPrimary
               style={{ backgroundColor: `${tag?.data?.color}` }}
             >

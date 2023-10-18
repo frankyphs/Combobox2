@@ -137,7 +137,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                 children: (_, propsInput) => (
                   <button {...propsInput}>
                     {props.type === "tags" && !props.multiSelect ? (
-                      <OptionTags option={objectSingle} size="props.size" />
+                      <OptionTags option={objectSingle} size={props.size} />
                     )
                       : props.type === "persona" && !!!props.multiSelect ? (
                         <>
