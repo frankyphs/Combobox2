@@ -46,7 +46,7 @@ export interface IFieldDropdown {
   onCancel?: (selectedOptions: string[]) => void
   onClear?: (selectedOptions: string[]) => void
   onDeleteTag?: (selectedOptions: string[]) => void
-  onChangeOption?: (newValue: IOptionsDropdown[]) => void
+  onOptionChange?: (newValue: IOptionsDropdown[]) => void
   onRenderOption?: (option: IOptionsDropdown) => JSX.Element
   onRenderSelectedOption?: (option: string[]) => JSX.Element
   size?: "small" | "medium" | "large"
