@@ -450,7 +450,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
   useEffect(() => {
     props.options && getTextForTextField(props.selectedOptions || selectedOptions, props.options)
     setObjectSelectedOption(getSelectedObjects(props.selectedOptions || selectedOptions));
-  }, [props.selectedOptions, selectedOptions])
+  }, [props.selectedOptions, selectedOptions, props.options])
 
   useEffect(() => {
     !!!props.isEditing !== undefined && setIsEditing(props.isEditing)
