@@ -1,12 +1,11 @@
 /* eslint-disable */
-import { Button, Dropdown, Field, Input, Option, InputOnChangeData, TagGroupProps, partitionAvatarGroupItems, } from "@fluentui/react-components";
+import { Button, Dropdown, Field, Input, Option, InputOnChangeData, TagGroupProps, partitionAvatarGroupItems, Text, Tag } from "@fluentui/react-components";
 import React, { useState, useEffect } from "react";
-import { IFieldDropdown, IOptionsDropdown } from "../utils/interface";
-import { Search16Filled, Add16Filled, ChevronDown20Regular } from "@fluentui/react-icons";
+import { IFieldDropdown, IOptionsDropdown, IOptionsPersona, IOptionsTag } from "../utils/interface";
+import { Search16Filled, Add16Filled, ChevronDown20Regular, Dismiss16Regular } from "@fluentui/react-icons";
 import InactiveReadView from "./InactiveReadView";
 import { MultiOptionTags, OptionDropdown, OptionMultiPersona, OptionPersona, OptionTags, InputDropdownIsEditingFalse } from "./OptionDropdown";
-
-
+import { Circle } from "./Circle";
 
 export const FormDropdownField = (props: IFieldDropdown) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>(props.defaultSelectedOptions || []);
@@ -14,10 +13,31 @@ export const FormDropdownField = (props: IFieldDropdown) => {
   const [value, setValue] = React.useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean | undefined>(false);
   const [searchValue, setSearchValue] = useState<string>("");
+  const [addOptionValue, setAddOptionValue] = useState<string>("")
   const [objectSingle, setObjectSingle] = useState<IOptionsDropdown>()
   const [objectSelectedOption, setObjectSelectedOption] = useState<IOptionsDropdown[]>([])
   const [nameForPersona, setNameForPersona] = React.useState<string[]>([]);
 
+  const [isOptionAddOpen, setIsOptionAddOpen] = React.useState<boolean>(false)
+
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+
+  const [avatarUrlValue, setAvatarUrlValue] = useState<string>("")
+
+  const [isEmptyOption, setIsEmptyOption] = useState<boolean>(false)
+
+
+  useEffect(() => {
+    addOptionValue.trim() === "" ? setIsEmptyOption(true) : setIsEmptyOption(false)
+  }, [addOptionValue])
+
+  const handleColorClick = (color: string | null) => {
+    if (color === selectedColor) {
+      setSelectedColor(null);
+    } else {
+      setSelectedColor(color);
+    }
+  };
 
   useEffect(() => {
     props.options && getTextForTextField(props.selectedOptions || selectedOptions, props.options)
@@ -87,6 +107,14 @@ export const FormDropdownField = (props: IFieldDropdown) => {
     setSearchValue(data.value);
   }
 
+  const onChangeAddOption = (_: any, data: InputOnChangeData) => {
+    setAddOptionValue(data.value)
+  }
+
+  const onChangeAvatarImage = (_: any, data: InputOnChangeData) => {
+    setAvatarUrlValue(data.value)
+  }
+
   const generateUniqueId = () => {
     const now = new Date();
     return `${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getDate()}${now.getMonth()}${now.getFullYear()}`;
@@ -98,6 +126,21 @@ export const FormDropdownField = (props: IFieldDropdown) => {
   };
 
   const partitionedItems = partitionAvatarGroupItems({ items: nameForPersona });
+
+  const initialColors = [
+    "#FFF3DA",
+    "#D0D4CA",
+    "#FBECB2",
+    "#DFCCFB",
+    "#EAD7BB",
+    "#B5CB99",
+    "#FF6969",
+    "#EE9322",
+    "#ECEE81",
+    "#8CC0DE",
+    "#BC7AF9",
+  ];
+
 
   return (
     <>
@@ -164,43 +207,136 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                 : undefined
               }
             >
-              <Input value={searchValue} onClick={(ev) => { ev.stopPropagation() }} placeholder={props.placeholderSearch || "Search..."} onChange={onChangeSearch} contentBefore={<Search16Filled />} type="search" />
-              <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                {props.options && props.options
-                  .filter((option) => option.label?.toLowerCase().includes(searchValue.toLowerCase()))
-                  .map((filteredOption) => (
-                    <Option text={filteredOption.label} value={filteredOption.id} key={filteredOption.id}>
-                      {props.type === "dropdown" && (
-                        <OptionDropdown option={filteredOption} size={props.size} />
-                      )}
-                      {props.type === "persona" && (
-                        <OptionPersona option={filteredOption} size={props.size} />
-                      )}
-                      {props.type === "tags" && (
-                        <OptionTags option={filteredOption} size={props.size} />
-                      )}
-                    </Option>
-                  ))}
-              </div>
-              <Button
-                icon={<Add16Filled />}
-                onClick={() => {
-                  const userLabel = window.prompt("Masukkan label baru:", "Default Label");
-                  if (userLabel !== null) {
-                    const newOption = { id: generateUniqueId() as string, key: generateUniqueId(), label: userLabel as string };
-                    if (props.onChangeOption && props.options) {
-                      props.onChangeOption([...props.options, newOption])
-                    }
+              {!isOptionAddOpen ? (
+                <>
+                  <Input value={searchValue} onClick={(ev) => { ev.stopPropagation() }} placeholder={props.placeholderSearch || "Search..."} onChange={onChangeSearch} contentBefore={<Search16Filled />} type="search" />
+                  <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                    {props.options && props.options
+                      .filter((option) => option.label?.toLowerCase().includes(searchValue.toLowerCase()))
+                      .map((filteredOption) => (
+                        <Option text={filteredOption.label} value={filteredOption.id} key={filteredOption.id}>
+                          {props.type === "dropdown" && (
+                            <OptionDropdown option={filteredOption} size={props.size} />
+                          )}
+                          {props.type === "persona" && (
+                            <OptionPersona option={filteredOption} size={props.size} />
+                          )}
+                          {props.type === "tags" && (
+                            <OptionTags option={filteredOption} size={props.size} />
+                          )}
+                        </Option>
+                      ))}
+                  </div>
+                  <Button
+                    icon={<Add16Filled />}
+                    onClick={() => {
+                      // const userLabel = window.prompt("Masukkan label baru:", "Default Label");
+                      // if (userLabel !== null) {
+                      //   const newOption = { id: generateUniqueId() as string, key: generateUniqueId(), label: userLabel as string };
+                      //   if (props.onChangeOption && props.options) {
+                      //     props.onChangeOption([...props.options, newOption])
+                      //   }
+                      // }
+                      setIsOptionAddOpen(true)
+                    }}
+                  >
+                    {props.addText || "Add New Option"}
+                  </Button>
+                  <Button
+                    onClick={handleClearClick}
+                  >
+                    {props.clearText || "Clear"}
+                  </Button>
+                </>
+              ) :
+                <>
+                  <Text style={{ fontWeight: "bold" }}>New Option</Text>
+                  {
+                    isEmptyOption && (
+                      <Text style={{ color: "red" }}>Option required!</Text>
+                    )
                   }
-                }}
-              >
-                {props.addText || "Add New Option"}
-              </Button>
-              <Button
-                onClick={handleClearClick}
-              >
-                {props.clearText || "Clear"}
-              </Button>
+                  <Input value={addOptionValue} onClick={(ev) => { ev.stopPropagation() }} onChange={onChangeAddOption} type="text" style={{ margin: "5px 0" }} />
+                  {props.type === "tags" && (
+                    <>
+                      <div style={{ display: "flex", alignItems: "center", borderRadius: "3px" }}>
+                        <Text style={{ fontWeight: "bold" }}>Choose Tag Color </Text>
+                        <div
+                          onMouseEnter={(event) => {
+                            // Mengubah latar belakang saat dihover
+                            event.currentTarget.style.backgroundColor = "#e0e0e0"; // Ganti dengan warna abu-2 yang Anda inginkan
+                          }}
+                          onMouseLeave={(event) => {
+                            // Mengembalikan latar belakang saat tidak dihover
+                            event.currentTarget.style.backgroundColor = "transparent";
+                          }}
+                          onClick={() => setSelectedColor(null)} style={{ display: "flex", margin: "2px 0 0 5px" }}><Dismiss16Regular /></div>
+                      </div>
+                      <div>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                          {initialColors.map((color, index) => (
+                            <Circle
+                              key={index}
+                              color={color}
+                              selected={color === selectedColor}
+                              onClick={() => handleColorClick(color)}
+                            />
+                          ))}
+                        </div>
+                        <div style={{ margin: "20px 0 10px 0" }}>
+                          {!selectedColor && addOptionValue && (
+                            <Tag appearance="brand" >{addOptionValue}</Tag>
+                          )}
+                          {selectedColor && addOptionValue && (
+                            <Tag appearance="brand" style={{ backgroundColor: `${selectedColor}` }}>{addOptionValue}</Tag>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {props.type === "persona" && (
+                    <>
+                      <Text style={{ fontWeight: "bold" }}>Avatar Image URL </Text>
+                      <Input value={avatarUrlValue} onClick={(ev) => { ev.stopPropagation() }} onChange={onChangeAvatarImage} type="text" style={{ margin: "5px 0" }} />
+                    </>
+                  )}
+                  <div style={{ display: "flex", justifyContent: "end", margin: "10px 0" }}>
+                    {/* <div><Button onClick={() => setIsOptionAddOpen(false)}>Back</Button></div> */}
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3px" }}>
+                      <Button onClick={() => {
+                        setIsOptionAddOpen(false)
+                        setAddOptionValue("")
+                        setSelectedColor(null)
+                      }} appearance="secondary">Cancel</Button>
+                      <Button onClick={() => {
+                        if (addOptionValue.trim() !== "") {
+                          let newOption
+                          // @ts-ignore
+                          if (props.type === "tags") {
+                            newOption = { id: generateUniqueId() as string, key: generateUniqueId(), label: addOptionValue as string, data: { color: selectedColor } } as IOptionsTag;
+                          }
+                          if (props.type === "persona") {
+                            newOption = { id: generateUniqueId() as string, key: generateUniqueId(), label: addOptionValue as string, data: { icon: avatarUrlValue } } as IOptionsPersona;
+                          }
+                          if (props.type === "dropdown") {
+                            newOption = { id: generateUniqueId() as string, key: generateUniqueId(), label: addOptionValue as string };
+                          }
+
+                          newOption && props.onChangeOption && props.options && props.onChangeOption([...props.options, newOption])
+
+                          setIsOptionAddOpen(false)
+                          setAddOptionValue("")
+                          setSelectedColor(null)
+                        } else {
+                          return
+                        }
+                      }
+                      } appearance="primary">Save</Button>
+                    </div>
+                  </div>
+                </>
+              }
+
             </Dropdown>
           )}
           {!isEditing && (
