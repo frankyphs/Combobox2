@@ -387,6 +387,11 @@ export const FormDropdownField = (props: IFieldDropdown) => {
   const [objectSelectedOption, setObjectSelectedOption] = useState<IOptionsDropdown[]>([])
   const [nameForPersona, setNameForPersona] = React.useState<string[]>([]);
 
+  useEffect(() => {
+    console.log(nameForPersona, "<<<<<<<<>>>>>>>")
+  }, [nameForPersona])
+
+
   // state for trigger add option mode
   const [isOptionAddOpen, setIsOptionAddOpen] = React.useState<boolean>(false)
 
@@ -409,7 +414,6 @@ export const FormDropdownField = (props: IFieldDropdown) => {
   const [editAvatarImage, setEditAvatarImage] = React.useState<string>("")
 
   useEffect(() => {
-    console.log(dataEditOption, "<<<<<<>>>>>>")
     dataEditOption && setEditValue(dataEditOption.label)
     // @ts-ignore
     props.type === "persona" && dataEditOption && setEditAvatarImage(dataEditOption?.data?.icon || "")
@@ -437,8 +441,9 @@ export const FormDropdownField = (props: IFieldDropdown) => {
         return selectedOption ? selectedOption.label : "";
       }
     );
-    setNameForPersona(selectedTexts);
-    return selectedTexts ? setValue(selectedTexts.join(", ")) : "";
+    const filteredSelectedTexts = selectedTexts.filter(text => text !== '');
+    setNameForPersona(filteredSelectedTexts);
+    return filteredSelectedTexts ? setValue(filteredSelectedTexts.join(", ")) : "";
   }
 
   // code for multitag, selectedOptions will be convert as array of object
@@ -618,27 +623,30 @@ export const FormDropdownField = (props: IFieldDropdown) => {
               button={(props.selectedOptions && props.selectedOptions?.length > 0) || selectedOptions?.length > 0 ? {
                 children: (_, propsInput) => (
                   <button {...propsInput}>
-                    {props.type === "tags" && !props.multiSelect ? (
+                    {props.type === "tags" && !props.multiSelect && objectSingle ? (
                       <OptionTags option={objectSingle} size={props.size} isDropdownOption={true} />
                     )
-                      : props.type === "persona" && !!!props.multiSelect ? (
+                      : props.type === "persona" && !!!props.multiSelect && objectSingle ? (
                         <>
                           <OptionPersona option={objectSingle} size={props.size} isDropdownOption={true} />
                         </>
                       )
-                        : props.type === "tags" && props.multiSelect ? (
+                        : props.type === "tags" && props.multiSelect && objectSelectedOption ? (
                           <MultiOptionTags selectedOptions={objectSelectedOption} onTagClick={removeItem} isEditing={isEditing === true || props.isEditing === true} size={props.size} />
                         )
-                          : props.type === "persona" && props.multiSelect ? (
+                          : props.type === "persona" && props.multiSelect && partitionedItems ? (
                             <>
                               <OptionMultiPersona partitionedItems={partitionedItems} size={props.size} />
                             </>
                           )
-                            : (
-                              <>
-                                {propsInput.value}
-                              </>
-                            )}
+                            : !objectSingle ? (
+                              <div></div>
+                            )
+                              : (
+                                <>
+                                  {propsInput.value}
+                                </>
+                              )}
                     <><ChevronDown20Regular style={{ color: "#686868" }} /></>
                   </button>
                 )
@@ -824,9 +832,9 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                           <InputDropdownIsEditingFalse simpanDropdown={value} />
                         ) : (props.type === "tags" && props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
                           <MultiOptionTags selectedOptions={objectSelectedOption} isEditing={props.isEditing || isEditing} size={props.size} />
-                        ) : (props.type === "tags" && !!!props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
+                        ) : (props.type === "tags" && objectSingle && !!!props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
                           <OptionTags option={objectSingle} size={props.size} isDropdownOption={true} />
-                        ) : (props.type === "persona" && !!!props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
+                        ) : (props.type === "persona" && objectSingle && !!!props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
                           <OptionPersona option={objectSingle} size={props.size} isDropdownOption={true} />
                         ) : (props.type === "persona" && props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
                           <OptionMultiPersona partitionedItems={partitionedItems} size={props.size} />
