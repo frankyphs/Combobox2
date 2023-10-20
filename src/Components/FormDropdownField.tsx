@@ -718,7 +718,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                     {props.type === "persona" && (
                       <>
                         <Text>Avatar URL </Text>
-                        <Input value={avatarUrlValue} onClick={(ev) => { ev.stopPropagation() }} onChange={onChangEditAvatarImage} type="text" style={{ margin: "5px 0" }} />
+                        <Input value={avatarUrlValue} onClick={(ev) => { ev.stopPropagation() }} onChange={onChangeAvatarImage} type="text" style={{ margin: "5px 0" }} />
                       </>
                     )}
                     <div style={{ display: "flex", justifyContent: "end", margin: "10px 0" }}>
@@ -761,7 +761,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                     {props.type === "persona" && (
                       <>
                         <Text>Avatar URL</Text>
-                        <Input onClick={(ev) => { ev.stopPropagation() }} value={editAvatarImage} onChange={onChangeAvatarImage} style={{ margin: "5px 0 10px 0 " }}></Input>
+                        <Input onClick={(ev) => { ev.stopPropagation() }} value={editAvatarImage} onChange={onChangEditAvatarImage} style={{ margin: "5px 0 10px 0 " }}></Input>
                       </>
                     )}
                     {props.type === "tags" && (
