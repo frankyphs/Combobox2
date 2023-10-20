@@ -387,65 +387,35 @@ export const FormDropdownField = (props: IFieldDropdown) => {
   const [objectSelectedOption, setObjectSelectedOption] = useState<IOptionsDropdown[]>([])
   const [nameForPersona, setNameForPersona] = React.useState<string[]>([]);
 
+  // state for trigger add option mode
   const [isOptionAddOpen, setIsOptionAddOpen] = React.useState<boolean>(false)
 
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-
-  const [avatarUrlValue, setAvatarUrlValue] = useState<string>("")
-
-  // const [isEmptyOption, setIsEmptyOption] = useState<boolean>(false)
-
+  // state for trigger edit option mode
   const [isOptionEditOpen, setIsOptionEditOpen] = React.useState<boolean>(false)
 
+  // color value while add option
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+
+  // avatar value while add option
+  const [avatarUrlValue, setAvatarUrlValue] = useState<string>("")
+
+  // object value selected option for edit option
   const [dataEditOption, setDataEditOption] = React.useState<IOptionsDropdown | IOptionsPersona | IOptionsTag>()
 
+  // label value while edit option
   const [editValue, setEditValue] = React.useState<string>("")
 
+  // avatar value while edit option
   const [editAvatarImage, setEditAvatarImage] = React.useState<string>("")
 
   useEffect(() => {
-    console.log(dataEditOption)
-    // console.log(dataEditOption?.data?.icon)
+    console.log(dataEditOption, "<<<<<<>>>>>>")
     dataEditOption && setEditValue(dataEditOption.label)
     // @ts-ignore
-    props.type === "persona" && dataEditOption && setEditAvatarImage(dataEditOption?.data?.icon)
+    props.type === "persona" && dataEditOption && setEditAvatarImage(dataEditOption?.data?.icon || "")
     // @ts-ignore
     props.type === "tags" && dataEditOption && setSelectedColor(dataEditOption?.data?.color)
-  }, [dataEditOption, editAvatarImage])
-
-  const handleColorClick = (color: string | null) => {
-    if (color === selectedColor) {
-      setSelectedColor(null);
-    } else {
-      setSelectedColor(color);
-    }
-  };
-
-  const handleSaveEditOption = () => {
-    const updatedOptions = props.options?.map(option => {
-      if (dataEditOption && option.id === dataEditOption.id) {
-        if (props.type === "dropdown") {
-          return { ...option, label: editValue };
-        } else if (props.type === "persona") {
-          return { ...option, label: editValue, data: { icon: editAvatarImage } };
-        } else if (props.type === "tags") {
-          return { ...option, label: editValue, data: { color: selectedColor } };
-        }
-      }
-      return option;
-    });
-
-    props.onOptionChange && updatedOptions && props.onOptionChange(updatedOptions);
-    setIsOptionEditOpen(false)
-  }
-
-  const handleDeleteOption = () => {
-    if (dataEditOption) {
-      const updatedOptions = props.options?.filter(option => option.id !== dataEditOption.id);
-      props.onOptionChange && updatedOptions && props.onOptionChange(updatedOptions);
-      setIsOptionEditOpen(false);
-    }
-  };
+  }, [dataEditOption])
 
   useEffect(() => {
     props.options && getTextForTextField(props.selectedOptions || selectedOptions, props.options)
@@ -471,12 +441,14 @@ export const FormDropdownField = (props: IFieldDropdown) => {
     return selectedTexts ? setValue(selectedTexts.join(", ")) : "";
   }
 
+  // code for multitag, selectedOptions will be convert as array of object
   function getSelectedObjects(selectedOptionIds: string[]): IOptionsDropdown[] {
     return selectedOptionIds?.map((id) => {
       return props.options?.find((option) => option.id === id);
     }).filter((option) => option !== undefined) as IOptionsDropdown[];
   }
 
+  // onChange while selected options
   const onOptionSelect = (_: any, data: any) => {
     const selectedItems = data.selectedOptions;
     if (!!!props.selectedOptions) {
@@ -511,44 +483,88 @@ export const FormDropdownField = (props: IFieldDropdown) => {
     setIsEditing(true);
   };
 
+  // onChange while searching option
   const onChangeSearch = (_: any, data: InputOnChangeData) => {
     setSearchValue(data.value);
   }
 
+  // onChange label/value while adding option
   const onChangeAddOption = (_: any, data: InputOnChangeData) => {
     setAddOptionValue(data.value)
   }
 
-
+  // trigger for edit option
   const onClickEdit = (ev: any, data: IOptionsDropdown | IOptionsPersona | IOptionsTag) => {
     ev.stopPropagation()
     setDataEditOption(data)
     setIsOptionEditOpen(true)
   }
 
+  // onChange avatar while editing option
   const onChangeAvatarImage = (_: any, data: InputOnChangeData) => {
     setAvatarUrlValue(data.value)
   }
 
+  // onChange label/value while editing option
   const onChangeEditOption = (_: any, data: InputOnChangeData) => {
     setEditValue(data.value)
   }
 
+  // onChange avatar while editing option
   const onChangEditAvatarImage = (_: any, data: InputOnChangeData) => {
     setEditAvatarImage(data.value)
   }
 
+  // generate id while adding option
   const generateUniqueId = () => {
     const now = new Date();
     return `${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getDate()}${now.getMonth()}${now.getFullYear()}`;
   }
 
+  // remove tag while isEdit true
   const removeItem: TagGroupProps["onDismiss"] = (_e, { value }) => {
     props.onDeleteTag && props.selectedOptions ? props.onDeleteTag([...props.selectedOptions].filter((tag) => tag !== value))
       : setSelectedOptions([...selectedOptions].filter((tag) => tag !== value));
   };
 
   const partitionedItems = partitionAvatarGroupItems({ items: nameForPersona });
+
+  // selected color while add option
+  const handleColorClick = (color: string | null) => {
+    if (color === selectedColor) {
+      setSelectedColor(null);
+    } else {
+      setSelectedColor(color);
+    }
+  };
+
+  // handle save while editing option
+  const handleSaveEditOption = () => {
+    const updatedOptions = props.options?.map(option => {
+      if (dataEditOption && option.id === dataEditOption.id) {
+        if (props.type === "dropdown") {
+          return { ...option, label: editValue };
+        } else if (props.type === "persona") {
+          return { ...option, label: editValue, data: { icon: editAvatarImage } };
+        } else if (props.type === "tags") {
+          return { ...option, label: editValue, data: { color: selectedColor } };
+        }
+      }
+      return option;
+    });
+
+    props.onOptionChange && updatedOptions && props.onOptionChange(updatedOptions);
+    setIsOptionEditOpen(false)
+  }
+
+  // handle delete option while editing option
+  const handleDeleteOption = () => {
+    if (dataEditOption) {
+      const updatedOptions = props.options?.filter(option => option.id !== dataEditOption.id);
+      props.onOptionChange && updatedOptions && props.onOptionChange(updatedOptions);
+      setIsOptionEditOpen(false);
+    }
+  };
 
   const initialColors = [
     "#FFF3DA",
@@ -597,6 +613,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
               selectedOptions={props.selectedOptions || selectedOptions}
               value={value}
               placeholder={props.placeholderDropdown || "Select Options"}
+              // render option 
               //@ts-ignore
               button={(props.selectedOptions && props.selectedOptions?.length > 0) || selectedOptions?.length > 0 ? {
                 children: (_, propsInput) => (
@@ -629,6 +646,7 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                 : undefined
               }
             >
+              {/* render option normally */}
               {!isOptionAddOpen && !isOptionEditOpen ? (
                 <>
                   <Input value={searchValue} onClick={(ev) => { ev.stopPropagation() }} placeholder={props.placeholderSearch || "Search..."} onChange={onChangeSearch} contentBefore={<Search16Filled />} type="search" />
@@ -663,129 +681,132 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                     {props.clearText || "Clear"}
                   </Button>
                 </>
-              ) : isOptionAddOpen && !isOptionEditOpen ? (
-                <>
-                  <Label style={{ backgroundColor: "#F5F7F8", margin: "0 -4px", padding: "10px 20px 10px 5px", fontWeight: "bold" }}>Add Option</Label>
-                  <Text>Name</Text>
-                  <Input value={addOptionValue} onClick={(ev) => { ev.stopPropagation() }} onChange={onChangeAddOption} type="text" style={{ margin: "5px 0" }} />
-                  {props.type === "tags" && (
-                    <>
-                      <div style={{ display: "flex", alignItems: "center", borderRadius: "3px" }}>
-                        <Text>Color</Text>
-                      </div>
-                      <div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
-                          {initialColors.map((color, index) => (
-                            <Circle
-                              key={index}
-                              color={color}
-                              selected={color === selectedColor}
-                              onClick={() => handleColorClick(color)}
-                            />
-                          ))}
+              )
+                // render option while add option
+                : isOptionAddOpen && !isOptionEditOpen ? (
+                  <>
+                    <Label style={{ backgroundColor: "#F5F7F8", margin: "0 -4px", padding: "10px 20px 10px 5px", fontWeight: "bold" }}>Add Option</Label>
+                    <Text>Name</Text>
+                    <Input value={addOptionValue} onClick={(ev) => { ev.stopPropagation() }} onChange={onChangeAddOption} type="text" style={{ margin: "5px 0" }} />
+                    {props.type === "tags" && (
+                      <>
+                        <div style={{ display: "flex", alignItems: "center", borderRadius: "3px" }}>
+                          <Text>Color</Text>
                         </div>
-                        <div style={{ margin: "20px 0 10px 0" }}>
-                          {!selectedColor && addOptionValue && (
-                            <Tag appearance="brand" >{addOptionValue}</Tag>
-                          )}
-                          {selectedColor && addOptionValue && (
-                            <Tag appearance="brand" style={{ backgroundColor: `${selectedColor}` }}>{addOptionValue}</Tag>
-                          )}
+                        <div>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                            {initialColors.map((color, index) => (
+                              <Circle
+                                key={index}
+                                color={color}
+                                selected={color === selectedColor}
+                                onClick={() => handleColorClick(color)}
+                              />
+                            ))}
+                          </div>
+                          <div style={{ margin: "20px 0 10px 0" }}>
+                            {!selectedColor && addOptionValue && (
+                              <Tag appearance="brand" >{addOptionValue}</Tag>
+                            )}
+                            {selectedColor && addOptionValue && (
+                              <Tag appearance="brand" style={{ backgroundColor: `${selectedColor}` }}>{addOptionValue}</Tag>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  )}
-                  {props.type === "persona" && (
-                    <>
-                      <Text>Avatar URL </Text>
-                      <Input value={avatarUrlValue} onClick={(ev) => { ev.stopPropagation() }} onChange={onChangEditAvatarImage} type="text" style={{ margin: "5px 0" }} />
-                    </>
-                  )}
-                  <div style={{ display: "flex", justifyContent: "end", margin: "10px 0" }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3px" }}>
-                      <Button onClick={() => {
-                        setIsOptionAddOpen(false)
-                        setAddOptionValue("")
-                        setSelectedColor(null)
-                      }} appearance="secondary">Cancel</Button>
-                      <Button disabled={addOptionValue.trim() === ""} onClick={() => {
-                        let newOption
-                        // @ts-ignore
-                        if (props.type === "tags") {
-                          newOption = { id: generateUniqueId() as string, key: generateUniqueId(), label: addOptionValue as string, data: { color: selectedColor } } as IOptionsTag;
-                        }
-                        if (props.type === "persona") {
-                          newOption = { id: generateUniqueId() as string, key: generateUniqueId(), label: addOptionValue as string, data: { icon: avatarUrlValue } } as IOptionsPersona;
-                        }
-                        if (props.type === "dropdown") {
-                          newOption = { id: generateUniqueId() as string, key: generateUniqueId(), label: addOptionValue as string };
-                        }
+                      </>
+                    )}
+                    {props.type === "persona" && (
+                      <>
+                        <Text>Avatar URL </Text>
+                        <Input value={avatarUrlValue} onClick={(ev) => { ev.stopPropagation() }} onChange={onChangEditAvatarImage} type="text" style={{ margin: "5px 0" }} />
+                      </>
+                    )}
+                    <div style={{ display: "flex", justifyContent: "end", margin: "10px 0" }}>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3px" }}>
+                        <Button onClick={() => {
+                          setIsOptionAddOpen(false)
+                          setAddOptionValue("")
+                          setSelectedColor(null)
+                        }} appearance="secondary">Cancel</Button>
+                        <Button disabled={addOptionValue.trim() === ""} onClick={() => {
+                          let newOption
+                          // @ts-ignore
+                          if (props.type === "tags") {
+                            newOption = { id: generateUniqueId() as string, key: generateUniqueId(), label: addOptionValue as string, data: { color: selectedColor } } as IOptionsTag;
+                          }
+                          if (props.type === "persona") {
+                            newOption = { id: generateUniqueId() as string, key: generateUniqueId(), label: addOptionValue as string, data: { icon: avatarUrlValue } } as IOptionsPersona;
+                          }
+                          if (props.type === "dropdown") {
+                            newOption = { id: generateUniqueId() as string, key: generateUniqueId(), label: addOptionValue as string };
+                          }
 
-                        newOption && props.onOptionChange && props.options && props.onOptionChange([...props.options, newOption])
+                          newOption && props.onOptionChange && props.options && props.onOptionChange([...props.options, newOption])
 
-                        setIsOptionAddOpen(false)
-                        setAddOptionValue("")
-                        setSelectedColor(null)
-                      }
-                      } appearance="primary">Save</Button>
-                    </div>
-                  </div>
-                </>
-              ) :
-                <>
-                  <Label style={{ backgroundColor: "#F5F7F8", margin: "0 -4px", padding: "10px 20px 10px 5px", fontWeight: "bold" }}>Edit Option</Label>
-                  <Text>Name</Text>
-                  <Input onClick={(ev) => { ev.stopPropagation() }} value={editValue} onChange={onChangeEditOption} style={{ margin: "5px 0 5px 0 " }}></Input>
-                  {props.type === "persona" && (
-                    <>
-                      <Text>Avatar URL</Text>
-                      <Input onClick={(ev) => { ev.stopPropagation() }} value={editAvatarImage} onChange={onChangeAvatarImage} style={{ margin: "5px 0 10px 0 " }}></Input>
-                    </>
-                  )}
-                  {props.type === "tags" && (
-                    <>
-                      <div style={{ display: "flex", alignItems: "center", borderRadius: "3px" }}>
-                        <Text>Color</Text>
+                          setIsOptionAddOpen(false)
+                          setAddOptionValue("")
+                          setSelectedColor(null)
+                        }
+                        } appearance="primary">Save</Button>
                       </div>
-                      <div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
-                          {initialColors.map((color, index) => (
-                            <Circle
-                              key={index}
-                              color={color}
-                              selected={color === selectedColor}
-                              onClick={() => handleColorClick(color)}
-                            />
-                          ))}
+                    </div>
+                  </>
+                )
+                  //  rendeer option while edit option
+                  :
+                  <>
+                    <Label style={{ backgroundColor: "#F5F7F8", margin: "0 -4px", padding: "10px 20px 10px 5px", fontWeight: "bold" }}>Edit Option</Label>
+                    <Text>Name</Text>
+                    <Input onClick={(ev) => { ev.stopPropagation() }} value={editValue} onChange={onChangeEditOption} style={{ margin: "5px 0 5px 0 " }}></Input>
+                    {props.type === "persona" && (
+                      <>
+                        <Text>Avatar URL</Text>
+                        <Input onClick={(ev) => { ev.stopPropagation() }} value={editAvatarImage} onChange={onChangeAvatarImage} style={{ margin: "5px 0 10px 0 " }}></Input>
+                      </>
+                    )}
+                    {props.type === "tags" && (
+                      <>
+                        <div style={{ display: "flex", alignItems: "center", borderRadius: "3px" }}>
+                          <Text>Color</Text>
                         </div>
-                        <div style={{ margin: "20px 0 10px 0" }}>
-                          {!selectedColor && editValue && (
-                            <Tag appearance="brand" >{editValue}</Tag>
-                          )}
-                          {selectedColor && editValue && (
-                            <Tag appearance="brand" style={{ backgroundColor: `${selectedColor}` }}>{editValue}</Tag>
-                          )}
+                        <div>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                            {initialColors.map((color, index) => (
+                              <Circle
+                                key={index}
+                                color={color}
+                                selected={color === selectedColor}
+                                onClick={() => handleColorClick(color)}
+                              />
+                            ))}
+                          </div>
+                          <div style={{ margin: "20px 0 10px 0" }}>
+                            {!selectedColor && editValue && (
+                              <Tag appearance="brand" >{editValue}</Tag>
+                            )}
+                            {selectedColor && editValue && (
+                              <Tag appearance="brand" style={{ backgroundColor: `${selectedColor}` }}>{editValue}</Tag>
+                            )}
+                          </div>
                         </div>
+                      </>
+                    )}
+                    <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0", alignItems: "center" }}>
+                      <div style={{ width: "30px", height: "30px", borderRadius: "5px", justifyContent: "center", alignItems: "center", display: "flex" }} onMouseEnter={(event) => {
+                        event.currentTarget.style.backgroundColor = "#e0e0e0";
+                      }}
+                        onMouseLeave={(event) => {
+                          event.currentTarget.style.backgroundColor = "transparent";
+                        }}>
+                        <Delete16Regular onClick={handleDeleteOption} />
                       </div>
-                    </>
-                  )}
-                  <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0", alignItems: "center" }}>
-                    <div style={{ width: "30px", height: "30px", borderRadius: "5px", justifyContent: "center", alignItems: "center", display: "flex" }} onMouseEnter={(event) => {
-                      event.currentTarget.style.backgroundColor = "#e0e0e0";
-                    }}
-                      onMouseLeave={(event) => {
-                        event.currentTarget.style.backgroundColor = "transparent";
-                      }}>
-                      <Delete16Regular onClick={handleDeleteOption} />
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3px" }}>
+                        <Button appearance="secondary" onClick={() => setIsOptionEditOpen(false)}>Cancel</Button>
+                        <Button disabled={editValue.trim() === ""} appearance="primary" onClick={handleSaveEditOption}>Save</Button>
+                      </div>
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3px" }}>
-                      <Button appearance="secondary" onClick={() => setIsOptionEditOpen(false)}>Cancel</Button>
-                      <Button appearance="primary" onClick={handleSaveEditOption}>Save</Button>
-                    </div>
-                  </div>
-                </>
+                  </>
               }
-
             </Dropdown>
           )}
           {!isEditing && (
@@ -810,7 +831,6 @@ export const FormDropdownField = (props: IFieldDropdown) => {
                         ) : (props.type === "persona" && props.multiSelect && ((props.selectedOptions?.length ?? 0) > 0 || (selectedOptions?.length ?? 0) > 0)) ? (
                           <OptionMultiPersona partitionedItems={partitionedItems} size={props.size} />
                         ) : <div />
-
                       )
                     }
                   }}
