@@ -8,6 +8,7 @@ import {
 import { IOptionsDropdown, IOptionsPersona, IOptionsTag } from "./utils/interface";
 
 
+
 function App() {
   // ini value untuk single select (udah gaperlu lagi)
   const [selectedOptions, setSelectedOptions] = useState<string[]>([])
@@ -16,8 +17,6 @@ function App() {
   const onChange = (newValue: string[]) => {
     setSelectedOptions(newValue);
   };
-
-
 
   const onChangeMulti = (newValue: string[]) => {
     setSelectedOptionsMulti(newValue);
@@ -87,6 +86,7 @@ function App() {
     { id: "7", label: "economy", data: { color: "#EE9322" } },
     { id: "8", label: "criminal" },
   ]);
+
 
   const onChangeOptionTag = (newValue: IOptionsTag[]) => {
     setOptionsTag(newValue)
@@ -160,6 +160,9 @@ function App() {
   ])
 
 
+  // custom options
+
+
   return (
     <>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", border: "1px solid red", padding: "0 20px 20px 20px" }}>
@@ -169,7 +172,7 @@ function App() {
           {/* <FormDropdownField options={options} onChange={onChange} selectedOptions={selectedOptions} onCancel={onCancel} type="dropdown" label="Dropdown Controlled" isEditing={isEditing} onEditClick={onEditClick} onSave={onSave} onClear={onClearSingle} /> */}
           <FormDropdownField type="persona" label="Persona Uncontrolled" options={optionsPersona} onOptionChange={onChangeOptionPersona} />
           <FormDropdownField type="tags" label="Tags Uncontrolled" options={optionsTag} onOptionChange={onChangeOptionTag} />
-          <FormDropdownField type="tags" label="Tags Controlled" options={optionsTag} onChange={onChange} selectedOptions={selectedOptions} onCancel={onCancel} isEditing={isEditing} onEditClick={onEditClick} onSave={onSave} onClear={onClearSingle} onDeleteTag={onDeleteTagSingle} onOptionChange={onChangeOptionTag} />
+          <FormDropdownField type="tags" label="Tags Controlled" options={optionsTag} onChange={onChange} selectedOptions={selectedOptions} onCancel={onCancel} isEditing={isEditing} onEditClick={onEditClick} onSave={onSave} onClear={onClearSingle} onDeleteTag={onDeleteTagSingle} onOptionChange={onChangeOptionTag} orientation="horizontal" />
         </div>
         <div>
           <p>Multi Select</p>
@@ -177,7 +180,7 @@ function App() {
           {/* <FormDropdownField multiSelect options={options} onChange={onChangeMulti} selectedOptions={selectedOptionsMulti} onCancel={onCancelMulti} type="dropdown" label="Dropdown Controlled" onSave={onSaveMulti} onClear={onClearMulti} /> */}
           <FormDropdownField multiSelect type="persona" label="Persona Uncontrolled Multiselect" options={optionsPersona} onOptionChange={onChangeOptionPersona} />
           <FormDropdownField multiSelect type="tags" label="Tag Uncontrolled Multiselect" options={optionsTag} onOptionChange={onChangeOptionTag} />
-          <FormDropdownField multiSelect type="tags" label="Tag Controlled Multiselect" options={optionsTag} onChange={onChangeMulti} selectedOptions={selectedOptionsMulti} onCancel={onCancelMulti} onSave={onSaveMulti} onClear={onClearMulti} onDeleteTag={onDeleteTagMulti} onOptionChange={onChangeOptionTag} />
+          <FormDropdownField multiSelect type="tags" label="Tag Controlled Multiselect" options={optionsTag} onChange={onChangeMulti} selectedOptions={selectedOptionsMulti} onCancel={onCancelMulti} onSave={onSaveMulti} onClear={onClearMulti} onDeleteTag={onDeleteTagMulti} onOptionChange={onChangeOptionTag} orientation="horizontal" />
         </div>
       </div>
 
@@ -208,8 +211,14 @@ function App() {
           <FormDropdownField multiSelect type="tags" label="Tag Uncontrolled Multiselect" options={optionsTag} size="large" onOptionChange={onChangeOptionTag} />
         </div>
       </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", border: "1px solid red", padding: "0 20px 20px 20px", margin: "20px 0" }}>
 
-
+        <div>
+          <FormDropdownField type="dropdown" label="All is Uncontrolled " />
+          <FormDropdownField type="tags" label="All is Uncontrolled " />
+          <FormDropdownField type="persona" label="All is Uncontrolled " />
+        </div>
+      </div>
     </>
   );
 }

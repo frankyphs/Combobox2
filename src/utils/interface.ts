@@ -25,7 +25,15 @@ export interface IOptionsTag {
   }
 }
 
+// export interface IOptionsCustom {
+//   id?: string,
+//   key?: string,
+//   label: string,
+//   data?:
+// }
+
 export interface IFieldDropdown {
+  options?: IOptionsDropdown[] | IOptionsPersona[] | IOptionsTag[],
   label?: string,
   addText?: string,
   clearText?: string,
@@ -35,7 +43,6 @@ export interface IFieldDropdown {
   placeholderDropdown?: string,
   defaultSelectedOptions?: string[],
   selectedOptions?: string[],
-  options?: IOptionsDropdown[] | IOptionsPersona[] | IOptionsTag[],
   multiSelect?: boolean
   type?: "dropdown" | "persona" | "tags"
   orientation?: "vertical" | "horizontal"
